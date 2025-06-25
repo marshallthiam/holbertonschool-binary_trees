@@ -46,16 +46,27 @@ static int check_perfect(const binary_tree_t *tree, size_t depth, size_t level)
  * binary_tree_is_perfect - checks if a binary tree is perfect
  * @tree: pointer to the root node of the tree to check
  * Return: 1 if perfect, 0 if NULL or not perfect
- */
+ */*
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-    size_t depth;
-
     if (!tree)
         return 0;
 
-    /* Get depth of leftmost leaf */
-    depth = binary_tree_depth(tree);
+    int left_height = binary_tree_height(tree->left);
+    int right_height = binary_tree_height(tree->right);
 
-    return check_perfect(tree, depth, 0);
+    if (left_height != right_height)
+        return 0;
+
+    int left_perfect = binary_tree_is_perfect(tree->left);
+    int right_perfect = binary_tree_is_perfect(tree->right);
+
+    if (left_perfect && right_perfect)
+        return 1;
+
+    if (!tree->left && !tree->right)
+        return 1;
+
+    return 0;
 }
+
